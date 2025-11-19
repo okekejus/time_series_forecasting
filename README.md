@@ -24,9 +24,30 @@ The data is then resampled (monthly sums), in order to create a cleaner graph (a
 <img width="1634" height="547" alt="image" src="https://github.com/user-attachments/assets/2d9a17a8-7edc-4e90-ab78-f439458c1df0" />
 
 It is clear that the variance and standard deviation of the dataset are not constant (i.e, the dataset is non-stationary). This means that certain transformations must be applied before we can continue with the forecasting process. To verify this, I ran an Augumented Dickey Fuller (ADF) test, to the following results: 
+
 ```
 ADF: -2.242311654766631
 p: 0.191248565295295
 Critical Values: {'1%': np.float64(-3.439960610754265), '5%': np.float64(-2.8657809735786244), '10%': np.float64(-2.5690284373908066)}
 The dataset is not stationary
 ```
+The resampled data does not show a seasonal trend, but for good measure I decided to plot the seasonality to be certain: 
+<img width="1626" height="547" alt="image" src="https://github.com/user-attachments/assets/c50300e2-78fe-4b4d-b08a-63e77cbd0f86" />
+
+So it appears we have a highly volatile dataset, very skewed to the right (data points get bigger as time goes further), with no clear seasonality trends. 
+
+## Transformations 
+I applied a few transformations to the dataset. The transformations and their reasonings are listed below: 
+- Log transform: needed to stabilize the variance of the dataset
+- Differencing: done to the transformed data, used to stabilize the mean/remove any trends from the dataset.
+
+An ADF test done on the transformed data provided the following results: 
+
+```
+ADF: -4.38551811759864
+p: 0.0003148483108971253
+Critical Values: {'1%': np.float64(-3.4400894360545475), '5%': np.float64(-2.865837730028723), '10%': np.float64(-2.5690586760471605)}
+The dataset is stationary
+```
+
+
