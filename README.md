@@ -50,4 +50,44 @@ Critical Values: {'1%': np.float64(-3.4400894360545475), '5%': np.float64(-2.865
 The dataset is stationary
 ```
 
+## Model Selection 
+We have a stationary dataset. Incredible. It is time to select the model to be used on the dataset. I am already leaning towards ARIMA, but need to determine the value of the coefficients by looking at the ACF and pACF plots derived from the transformed data. Those plots are included below: 
+<img width="1312" height="528" alt="image" src="https://github.com/user-attachments/assets/f4b93ca7-62ce-4ac8-9e7e-9e5fcc333d9d" />
+
+The ACF has a big negative spike at lag 1, indicative of an MA(1) process. The pACF shows strong negative spikes at lag 1, with other less prominent spikes featured along the lags, matching an AR(1)/AR(2) process, though not as strongly as the ACF matches the MA(1) process. No seasonality needs to be included in the model, as the dataset does not have one. 
+
+I decided to try three models on the data, based on the above diagnostics. 
+
+### ARIMA(0,1,1) 
+Generally the standard model to try first, which is what I did. 
+Terrible model for this dataset for the following reasons: 
+- MA(1) = -0.999, which means there is a ton of noise in the dataset and ARIMA cannot reliably estimate the model structure. A lot of spikes, burtsts, volatility and structural breaks are the cause of this.
+- Year to year volatility is prominent in the data
+- Q = 148.92 (p=0.00), meaning the residuals are not white noise + autocorrelation was not removed
+- JB = 4563 (p=0.00), meaning the residuals are extremely non-normal w/ heavy kurtosis (extreme outliers/spikes yearly)
+- H = 0.17 (p=0.00), meaning its variance is changing over time
+
+In other words, this data requires a model that can handle volatility/shock. enter GARCH. 
+
+### GARCH(1,1) 
+This is a model used to analyze and forecast the volatility of time series data. It is apparently used a lot for finance data, which is a good sign in my opinion. Model was run with mean set to 0 as the differencing has already been done. 
+Not a terrible model, but not ideal either, for the following reasons:
+
+- α + β ≈ 0.9999, which means volatility shocks decay extremely slowly. The process is essentially near-integrated, meaning the variance is almost non-stationary.
+- Volatility is extremely persistent, consistent with long periods of elevated uncertainty in the dataset.
+- Residuals still show bursts and occasional spikes, meaning the variance model does not fully capture the violent shock structure in the data.
+- Standardized residuals still show heavy tails, implying that a normal-distribution GARCH cannot handle the extreme shocks present in the series.
+
+Which brings me to the ARIMA + GARCH combination.
+
+### ARIMA(0,1,1) + GARCH(1,1) 
+This model creates residuals using the ARIMA model, then feeds those residuals into the GARCH model for modelling that accounts for residuals. The output for this model looks quite promising: 
+- PArameters are stable, variance converged, model is posed well.
+-  α + β ≈ 1 which is a common trend in data with a lot of volatility and shock. Both highly significant
+
+The model is performing similarly to other GARCH models related to volatile data (based on a few of my searches). But the residuals must be plotted + interpreted to be certain. 
+<img width="560" height="435" alt="image" src="https://github.com/user-attachments/assets/6a6b6cc3-a592-439c-9b48-82e51429bb89" />
+
+
+
 
