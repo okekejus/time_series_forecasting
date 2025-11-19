@@ -86,8 +86,17 @@ This model creates residuals using the ARIMA model, then feeds those residuals i
 -  α + β ≈ 1 which is a common trend in data with a lot of volatility and shock. Both highly significant
 
 The model is performing similarly to other GARCH models related to volatile data (based on a few of my searches). But the residuals must be plotted + interpreted to be certain. 
-<img width="560" height="435" alt="image" src="https://github.com/user-attachments/assets/6a6b6cc3-a592-439c-9b48-82e51429bb89" />
 
+<img width="560" height="435" alt="image" src="https://github.com/user-attachments/assets/6a6b6cc3-a592-439c-9b48-82e51429bb89" />
+This plot shows: 
+- no obvious autocorrelation
+- Relatively constant spread
+- range of 2 to -2 with a few spikes
+- Centred around 0
+- no visible clustering (meaning the volatility is accounted for)
+- The conditional volatility displays long run structural variance growth, which again, is typical for data like this.
+
+The next step is to use this model to forecast some data. 
 
 
 
