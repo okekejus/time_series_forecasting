@@ -88,6 +88,7 @@ This model creates residuals using the ARIMA model, then feeds those residuals i
 The model is performing similarly to other GARCH models related to volatile data (based on a few of my searches). But the residuals must be plotted + interpreted to be certain. 
 
 <img width="560" height="435" alt="image" src="https://github.com/user-attachments/assets/6a6b6cc3-a592-439c-9b48-82e51429bb89" />
+
 This plot shows: 
 - no obvious autocorrelation
 - Relatively constant spread
