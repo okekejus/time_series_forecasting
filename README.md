@@ -23,4 +23,10 @@ Many of the first points are zeros, which will affect most models. As a result, 
 The data is then resampled (monthly sums), in order to create a cleaner graph (and because I want to be able to make monthly predictions). I have also included the moving average and standard deviation to make conclusions about the nature of the data. 
 <img width="1634" height="547" alt="image" src="https://github.com/user-attachments/assets/2d9a17a8-7edc-4e90-ab78-f439458c1df0" />
 
-It is clear that the variance and standard deviation of the dataset are not constant (i.e, the dataset is non-stationary). This means that certain transformations must be applied before we can continue with the forecasting process. 
+It is clear that the variance and standard deviation of the dataset are not constant (i.e, the dataset is non-stationary). This means that certain transformations must be applied before we can continue with the forecasting process. To verify this, I ran an Augumented Dickey Fuller (ADF) test, to the following results: 
+```
+ADF: -2.242311654766631
+p: 0.191248565295295
+Critical Values: {'1%': np.float64(-3.439960610754265), '5%': np.float64(-2.8657809735786244), '10%': np.float64(-2.5690284373908066)}
+The dataset is not stationary
+```
